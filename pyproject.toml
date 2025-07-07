@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "windwise"
+version = "0.1.0"
+description = "A simple script to check if it's good to go sailing"
+authors = ["Glauco Oliveira <glauco.v.a.oliveira@gmail.com>"]
+license = "MIT"
+package-mode = false
+
+[tool.poetry.dependencies]
+APScheduler = "^3.11"
+influxdb3-python = "^0.14"
+numpy = "^2.3"
+openmeteo-requests = "^1.5"
+pandas = "^2.3"
+pydantic = "^2.11"
+python = "^3.13"
+requests = "^2.32"
+requests-cache = "^1.2"
+retry-requests = "^2.0"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.3.0"
+flake8-bugbear = "^24.12.12"
+
+[tool.dotenv]
+ignore = "false"
+location = ".env"
+
+[tool.poetry.plugins.dotenv]
+ignore = "false"
+location = ".env"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

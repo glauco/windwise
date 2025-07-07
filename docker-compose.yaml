@@ -1,0 +1,46 @@
+volumes:
+  iox_data: {}
+  postgres_data: {}
+  grafana_data: {}
+
+services:
+  influxdb3:
+    image: influxdb:3.2.1-core
+    container_name: influxdb3
+    volumes:
+      - ./data:/data
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: "setup"
+      DOCKER_INFLUXDB_INIT_ORG: "windwise"
+      DOCKER_INFLUXDB_INIT_BUCKET: "windwise"
+      DOCKER_INFLUXDB_INIT_RETENTION: "1w"
+      INFLUXDB3_MAX_HTTP_REQUEST_SIZE: "10485760"
+      INFLUXDB3_GEN1_DURATION: "10m"
+      INFLUXDB3_WAL_FLUSH_INTERVAL: "1s"
+      INFLUXDB3_WAL_SNAPSHOT_SIZE: "600"
+      INFLUXDB3_NUM_WAL_FILES_TO_KEEP: "50"
+      INFLUXDB3_WAL_MAX_WRITE_BUFFER_SIZE: "100000"
+      INFLUXDB3_BUFFER_MEM_LIMIT_MB: "5000"
+      INFLUXDB3_PARQUET_MEM_CACHE_SIZE: "1000"
+      INFLUXDB3_FORCE_SNAPSHOT_MEM_THRESHOLD: "70%"
+      INFLUXDB3_TELEMETRY_DISABLE_UPLOAD: true
+      INFLUXDB3_NODE_IDENTIFIER_PREFIX: "windwise1"
+      INFLUXDB3_BUCKET: "windwise"
+      INFLUXDB3_OBJECT_STORE: "file"
+      INFLUXDB3_DB_DIR: "/data"
+    restart: unless-stopped
+    expose:
+      - 8181
+    ports:
+      - 8086:8181
+      - 8181:8181
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana/
+    restart: always
+    depends_on:
+      - influxdb3

@@ -1,0 +1,304 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "ber7xoqft1csge"
+        },
+        "description": "Compares the wind prediction (using AROME-HD) agains the actual wind observations at Port Olimpic (Barcelona).",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "barWidthFactor": 0.6,
+              "drawStyle": "line",
+              "fillOpacity": 20,
+              "gradientMode": "scheme",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 2,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "dashed+area"
+              }
+            },
+            "decimals": 1,
+            "mappings": [],
+            "max": 25,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red"
+                },
+                {
+                  "color": "yellow",
+                  "value": 6
+                },
+                {
+                  "color": "green",
+                  "value": 10
+                },
+                {
+                  "color": "blue",
+                  "value": 15
+                },
+                {
+                  "color": "purple",
+                  "value": 20
+                }
+              ]
+            },
+            "unit": "velocityknot"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Predicted Wind Speed (10m)"
+              },
+              "properties": [
+                {
+                  "id": "custom.lineWidth",
+                  "value": 0
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "Predicted Wind Gusts (10m)"
+              },
+              "properties": [
+                {
+                  "id": "custom.lineWidth",
+                  "value": 0
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "hidden",
+            "placement": "right",
+            "showLegend": false
+          },
+          "tooltip": {
+            "hideZeros": false,
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "12.0.2",
+        "targets": [
+          {
+            "dataset": "iox",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "ber7xoqft1csge"
+            },
+            "editorMode": "builder",
+            "format": "time_series",
+            "hide": false,
+            "rawSql": "SELECT \"wind_speed\" AS \"observed wind speed\", \"time\" FROM \"weather_observation\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+            "refId": "Observed Wind Sped",
+            "sql": {
+              "columns": [
+                {
+                  "alias": "\"observed wind speed\"",
+                  "parameters": [
+                    {
+                      "name": "wind_speed",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                },
+                {
+                  "parameters": [
+                    {
+                      "name": "time",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ]
+            },
+            "table": "weather_observation"
+          },
+          {
+            "dataset": "iox",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "ber7xoqft1csge"
+            },
+            "editorMode": "builder",
+            "format": "table",
+            "hide": false,
+            "rawSql": "SELECT \"wind_speed_10m\" AS \"predicted wind speed\", \"time\" FROM \"weather_forecast_hourly\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+            "refId": "Predicted Wind Speed (10m)",
+            "sql": {
+              "columns": [
+                {
+                  "alias": "\"predicted wind speed\"",
+                  "parameters": [
+                    {
+                      "name": "wind_speed_10m",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                },
+                {
+                  "parameters": [
+                    {
+                      "name": "time",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ]
+            },
+            "table": "weather_forecast_hourly"
+          },
+          {
+            "dataset": "iox",
+            "datasource": {
+              "type": "influxdb",
+              "uid": "ber7xoqft1csge"
+            },
+            "editorMode": "builder",
+            "format": "table",
+            "hide": false,
+            "rawSql": "SELECT \"wind_gusts_10m\" AS \"predicted wind gusts\", \"time\" FROM \"weather_forecast_hourly\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+            "refId": "Predicted Wind Gusts (10m)",
+            "sql": {
+              "columns": [
+                {
+                  "alias": "\"predicted wind gusts\"",
+                  "parameters": [
+                    {
+                      "name": "wind_gusts_10m",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                },
+                {
+                  "parameters": [
+                    {
+                      "name": "time",
+                      "type": "functionParameter"
+                    }
+                  ],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ]
+            },
+            "table": "weather_forecast_hourly"
+          }
+        ],
+        "title": "Wind Prediction vs Observation",
+        "transparent": true,
+        "type": "timeseries"
+      }
+    ],
+    "preload": false,
+    "refresh": "5m",
+    "schemaVersion": 41,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now/d",
+      "to": "now/d"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Wind Wise",
+    "uid": "2e7611ec-4958-4558-8881-0cc5ca3bd270",
+    "version": 5
+  }
