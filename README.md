@@ -9,7 +9,6 @@ Windwise is a data collection and analysis system designed to evaluate the accur
 - `scheduler/`: Code for scheduling periodic jobs (see below).
 - `utils/`: Shared utilities (logging, helpers, etc.).
 - `main.py`: Entry point, starts the scheduler.
-- `config.py`: Centralized configuration (API keys, intervals, etc.).
 
 ## Running
 
