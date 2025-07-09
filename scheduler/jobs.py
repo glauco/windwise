@@ -37,7 +37,7 @@ def start_scheduler():
 
     # Then schedule recurring jobs
     logger.info("Setting up recurring jobs")
-    scheduler.add_job(collect_observation, 'interval', minutes=5)
-    scheduler.add_job(collect_forecast, 'interval', hours=6)
+    scheduler.add_job(collect_observation, 'interval', minutes=1)
+    scheduler.add_job(collect_forecast, 'interval', hours=1)
     scheduler.start()
     logger.info("Scheduler started successfully")
