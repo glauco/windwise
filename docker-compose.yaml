@@ -4,6 +4,19 @@ volumes:
   grafana_data: {}
 
 services:
+  windwise:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: windwise
+    environment:
+      INFLUXDB_HOST: ${INFLUXDB_HOST}
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
+      WINDWISE_DATABASE: ${WINDWISE_DATABASE}
+    restart: unless-stopped
+    depends_on:
+      - influxdb3
+
   influxdb3:
     image: influxdb:3.2.1-core
     container_name: influxdb3
