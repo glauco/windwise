@@ -1,3 +1,6 @@
+import os
+import tempfile
+
 import openmeteo_requests
 import pandas as pd
 import requests_cache
@@ -30,7 +33,10 @@ class WeatherForecastFetcher:
     def __init__(self):
         # Setup the Open-Meteo API client with cache and retry on error
         logger.info("Initializing WeatherForecastFetcher")
-        cache_session = requests_cache.CachedSession('.cache', expire_after=CACHE_EXPIRY)
+        # Use temp directory for cache file to ensure write permissions
+        cache_dir = tempfile.gettempdir()
+        cache_file = os.path.join(cache_dir, 'weather_cache')
+        cache_session = requests_cache.CachedSession(cache_file, expire_after=CACHE_EXPIRY)
         retry_session = retry(cache_session,
                               retries=RETRY_ATTEMPTS,
                               backoff_factor=RETRY_BACKOFF)
